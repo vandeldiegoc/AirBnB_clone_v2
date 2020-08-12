@@ -10,7 +10,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
-
+import shlex
 
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
@@ -115,16 +115,28 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
+        argv = args.split()
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        elif argv[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
+        new_instance = HBNBCommand.classes[argv[0]]()
+        for line in argv[1:]:
+                if "=" in line:
+                    news_d = line.split('=')
+                    if news_d[1].startswith('"') and news_d[1].endswith('"') == True:
+                        value = news_d[1][1:-1]
+                        value = value.replace('"',"/" )
+                        value = value.replace("'","/" )
+                        value = value.replace('_'," " )
+                        print(value)
+                        new_instance.__dict__[news_d[0]] = value
         storage.save()
         print(new_instance.id)
         storage.save()
+        
 
     def help_create(self):
         """ Help information for the create method """
@@ -284,7 +296,7 @@ class HBNBCommand(cmd.Cmd):
                 att_name = args[0]
             # check for quoted val arg
             if args[2] and args[2][0] is '\"':
-                att_val = args[2][1:args[2].find('\"', 1)]
+                amauuutt_val = args[2][1:args[2].find('\"', 1)]
 
             # if att_val was not quoted arg
             if not att_val and args[2]:
