@@ -12,6 +12,7 @@ from models.amenity import Amenity
 from models.review import Review
 import shlex
 
+
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
 
@@ -126,17 +127,16 @@ class HBNBCommand(cmd.Cmd):
         for line in argv[1:]:
                 if "=" in line:
                     news_d = line.split('=')
-                    if news_d[1].startswith('"') and news_d[1].endswith('"') == True:
+                    if (news_d[1].startswith('"') is True and
+                            news_d[1].endswith('"') is True):
                         value = news_d[1][1:-1]
-                        value = value.replace('"',"/" )
-                        value = value.replace("'","/" )
-                        value = value.replace('_'," " )
-                        print(value)
+                        value = value.replace('\"', "/")
+                        value = value.replace("\'", "/")
+                        value = value.replace('_', " ")
                         new_instance.__dict__[news_d[0]] = value
         storage.save()
         print(new_instance.id)
         storage.save()
-        
 
     def help_create(self):
         """ Help information for the create method """
@@ -214,15 +214,17 @@ class HBNBCommand(cmd.Cmd):
         print_list = []
 
         if args:
-            args = args.split(' ')[0]  # remove possible trailing args
+            args = args.split(' ')[0]
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage._FileStorage__objects.items():
+
+            obj = storage.all(HBNBCommand.classes[args])
+            for k, v in obj.items():
                 if k.split('.')[0] == args:
                     print_list.append(str(v))
         else:
-            for k, v in storage._FileStorage__objects.items():
+            for k, v in storage.all().items():
                 print_list.append(str(v))
 
         print(print_list)
