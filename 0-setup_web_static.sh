@@ -1,17 +1,10 @@
 #!/usr/bin/env bash
 # prepare web server
-sudo -apt-get update
-sudo apt -y install nginx
-sudo mkdir -p /data/web_static/{shared/,releases/test/}
-sudo chown $USER:$USER /data/
-echo "<html>
-  <head>
-  </head>
-  <body>
-    Holberton School
-  </body>
-</html>" > /data/web_static/releases/test/index.html
-sudo ln -fsn /data/web_static/releases/test/ /data/web_static/current
+sudo apt-get -y update
+sudo apt-get -y install nginx
+sudo mkdir -p /data/web_static/shared /data/web_static/releases/test
+sudo echo "Holberton School" | sudo tee /data/web_static/releases/test/index.html
+sudo ln -fs /data/web_static/releases/test /data/web_static/current
 sudo chown -R ubuntu:ubuntu /data/
-sed -i '/listen 80 default_server;/a location /hbnb_static/ {\n\talias /data/web_static/current/;\n}' /etc/nginx/sites-available/default
-service nginx restart
+sudo sed -i "41i \\\nlocation /hbnb_static/ {\n\talias /data/web_static/current/;\n}\n" /etc/nginx/sites-available/default
+sudo service nginx restart
