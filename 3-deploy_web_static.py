@@ -8,6 +8,17 @@ from fabric.operations import local, put, run
 env.hosts = ['35.243.223.95', '54.147.36.179']
 
 
+def do_pack():
+    """funtion do_pack"""
+    local('mkdir -p versions')
+    path = local("tar -cvzf versions/web_static_{}.tgz web_static".format(
+        datetime.strftime(datetime.now(), "%Y%m%d%H%M%S")))
+    if path.failed:
+        return None
+    else:
+        return path
+
+
 def do_deploy(archive_path):
     """funtion frabric"""
     if (os.path.isfile(archive_path) is False):
