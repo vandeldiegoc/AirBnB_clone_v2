@@ -1,4 +1,4 @@
-#!/urs/bin/python3
+#!/usr/bin/python3
 """create a .tgz file"""
 from fabric.api import *
 from datetime import datetime
