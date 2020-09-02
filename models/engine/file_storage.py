@@ -13,8 +13,7 @@ class FileStorage:
         if cls:
             new_dict = {}
             for key, value in self.__objects.items():
-                name_key = key[:key.find('.')]
-                if name_key == cls.__name__:
+                if cls == cls.__name__:
                     new_dict[key] = value
             return new_dict
         return FileStorage.__objects
@@ -57,8 +56,11 @@ class FileStorage:
             pass
 
     def delete(self, obj=None):
-        """Delete and object from __objects if it's inside."""
+        """Delete and object"""
         if obj:
             key = obj.__class__.__name__ + '.' + obj.id
             if key in self.__objects:
                 del self.__objects[key]
+                self.save()
+        else:
+            return

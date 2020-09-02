@@ -123,33 +123,30 @@ class HBNBCommand(cmd.Cmd):
         return strs
 
     def do_create(self, args):
-        """Create an object of any class."""
-        argv = args.split(' ')
-        new_dict = {}
-        value = ""
-        for i in range(1, len(argv)):
-            parameter = argv[i].split('=')
-            key = parameter[0]
-            s = parameter[1]
-            if s[0] != '"':
-                if '.' in s:
-                    value = float(s)
-                else:
-                    value = int(s)
-            else:
-                value1 = s.replace('_', ' ')
-                value = value1.replace('"', '')
-            new_dict.update({key: value})
+        """ Create an object of any """
+        argv = args.split()
         if not args:
             print("** class name missing **")
             return
         elif argv[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        if (len(argv) >= 1):
-            new_instance = HBNBCommand.classes[argv[0]](**new_dict)
-        else:
-            new_instance = HBNBCommand.classes[argv[0]]()
+        new_instance = HBNBCommand.classes[argv[0]]()
+        for line in argv[1:]:
+                if "=" in line:
+                    news_d = line.split('=')
+                    if (news_d[1].startswith('"') is True and
+                            news_d[1].endswith('"') is True):
+                        value = news_d[1][1:-1]
+                        value = value.replace('"', "/")
+                        value = value.replace("'", "/")
+                        value = value.replace('_', " ")
+                        new_instance.__dict__[news_d[0]] = value
+                    else:
+                        if '.' in news_d[1]:
+                            new_instance.__dict__[news_d[0]] = float(news_d[1])
+                        else:
+                            new_instance.__dict__[news_d[0]] = int(news_d[1])
         print(new_instance.id)
         new_instance.save()
 

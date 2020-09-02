@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ State Module for HBNB project """
 from models.base_model import BaseModel, Base
+from models.city import City
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from os import getenv
@@ -13,7 +14,7 @@ class State(BaseModel, Base):
         name = Column(String(128), nullable=False)
         cities = relationship('City', cascade='all, delete', backref='state')
 
-    else:    
+    else:
         @property
         def cities(self):
             """return obj list"""
@@ -23,5 +24,3 @@ class State(BaseModel, Base):
                 if value.state_id == self.id:
                     new_list.append(value)
             return new_list
-
-        name = ""
