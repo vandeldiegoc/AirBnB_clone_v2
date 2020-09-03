@@ -8,7 +8,7 @@ app.url_map.strict_slashes = False
 
 @app.route('/')
 def hello_flask():
-    return 'Hello HBNB'
+    return 'Hello HBNB!'
 
 
 @app.route('/hbnb')
@@ -21,7 +21,7 @@ def c(text):
     return "C {}".format(text.replace('_', ' '))
 
 
-@app.route('/python/', defaults={'text': 'is cool'})
+@app.route('/python', defaults={'text': 'is cool'})
 @app.route('/python/<text>')
 def python(text=None):
     return "python {}".format(text.replace('_', ' '))
