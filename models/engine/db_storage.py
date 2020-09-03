@@ -32,24 +32,17 @@ class DBStorage:
 
     def all(self, cls=None):
         """query database"""
-        new_dic = {}
-        if cls is None:
-            all_class = ['BaseModel', 'User', 'State', 'City',
-                         'Amenity', 'Place', 'Review']
-            table = []
-            for class_n in all_class:
-                    table += self.__session.query(eval(class_n)).all()
-                    for query in tabla:
-                        key = '{}.{}'.format(type(query).__name__, query.id)
-                        new_dic[key] = query
-            return new_dic
-
-        else:
-            tabla = self.__session.query(cls).all()
-            for query in tabla:
-                key = '{}.{}'.format(type(query).__name__, query.id)
-                new_dic[key] = query
-            return new_dic
+        new_dict = {}
+        objs = [v for k, v in classes.items()]
+        if cls:
+            if isinstance(cls, str):
+                cls = classes[cls]
+            objs = [cls]
+        for c in objs:
+            for instance in self.__session.query(c):
+                key = str(instance.__class__.__name__) + "." + str(instance.id)
+                new_dict[key] = instance
+        return (new_dict)
 
     def new(self, obj):
         """add new objet in database"""
